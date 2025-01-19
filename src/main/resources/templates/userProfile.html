@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/defaultLayout}">
+
+    <body class="mainBody" layout:fragment="content">
+        <script th:src="@{/js/userProfile.js}"></script>
+        <div class="d-flex h-100 w-100 align-items-center justify-content-center">
+            <div class="accountOptions w-75 mt-3 pt-3 pb-5 mb-3 align-items-center d-flex flex-column gap-3">
+                <!-- TODO replace with profile pic -->
+                <img th:src="@{/images/default-icon.jpg}" width="150px" height="150px">
+                <h2 th:text="${viewing.getUsername()}"></h2>
+                <div class="card text-center user-card" style="width: 18rem !important;">
+                    <div class="card-header">
+                        About Me
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+
+                            <p th:if="${viewing.getBio() != ''}" th:text="${viewing.getBio()}"></p>
+                            <p class="opacity-50" th:if="${viewing.getBio() == '' || viewing.getBio() == null}">This user hasn't written a bio!</p>
+                        </blockquote>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Member since <span th:text="${viewing.getCreatedDate()}"></span>
+                    </div>
+                </div>
+                <div class="d-flex flex-row gap-5">
+                    <span>Followers: <span th:text="${followersCount}"></span></span>
+                    <span>Following: <span th:text="${followingCount}"></span></span>
+                </div>
+                <input type="hidden" id="following" th:value="${following}">
+                <input th:if="${user != null}" type="hidden" id="loggedInUserId" th:value="${user.getId()}">
+                <input type="hidden" id="profileUserId" th:value="${viewing.getId()}">
+                <button th:if="${user != null}" id="followBtn" th:classappend="${following} ? 'btn-secondary' : 'btn-primary'" class="btn user-btn" th:text="${following} ? 'Following' : 'Follow'" onmouseenter="followBtnHover()" onmouseleave="followBtnHover()" th:onclick="${following} ? 'unfollowUser()' : 'followUser()'"></button>
+                <a th:if="${user != null && viewing.getId() == user.getId()}" th:href="@{/accounts/options}" class="btn btn-primary user-btn">Edit Profile</a>
+                <div id="posts" class="d-flex flex-column w-75">
+                    <div class="w-100" id="posts" th:each="post : ${posts}">
+                        <div th:replace="~{layouts/postPreview :: post}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>

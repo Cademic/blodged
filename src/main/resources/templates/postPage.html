@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/defaultLayout}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body class="mainBody">
+	<div class="" layout:fragment="content">
+		<div class="d-flex flex-lg-row flex-column">
+			<div class="postBox col-lg-9 col-12">
+				<div class="post-viewer mb-5">
+					<div id="posts" th:each="post : ${posts}">
+						<div th:replace="~{layouts/postPreview :: post}"></div>
+					</div>
+					<div class="replies-pane pb-4">
+						<h2 style="width: 100%; text-align: center;" class="pt-2" th:text="${replies.size() + ' replies'}"></h2>
+						<hr/>
+						<div id="replies" th:each="reply : ${replies}" class="mb-3">
+							<div th:replace="~{layouts/replyPreview :: reply}"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="searchBox col-lg-3 col-12">
+				<div style="margin: auto; width: 18rem;"
+					class="accountOptions mt-3 pt-3 pb-5 mb-3 align-items-center d-flex flex-column gap-3">
+					<!-- TODO replace with profile pic -->
+					<img th:src="@{/images/default-icon.jpg}" width="150px" height="150px">
+					<h2><a th:text="${viewing.getUsername()}" th:href="${'/accounts/view/' + viewing.getId()}"/></h2>
+					<div class="card text-center user-card" style="width: 16rem !important;">
+						<div class="card-header">
+							About Me
+						</div>
+						<div class="card-body">
+							<blockquote class="blockquote mb-0">
+								<p th:if="${viewing.getBio() != ''}" th:text="${viewing.getBio()}"></p>
+								<p class="opacity-50" th:if="${viewing.getBio() == '' || viewing.getBio() == null}">This
+									user hasn't written a bio!</p>
+							</blockquote>
+						</div>
+						<div class="card-footer text-muted">
+							Member since <span th:text="${viewing.getCreatedDate()}"></span>
+						</div>
+					</div>
+					<div class="d-flex flex-row gap-5">
+						<span>Followers: <span th:text="${followersCount}"></span></span>
+						<span>Following: <span th:text="${followingCount}"></span></span>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

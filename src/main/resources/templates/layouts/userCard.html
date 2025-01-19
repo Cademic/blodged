@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<!-- user = logged in user -->
+<!-- viewing = followed user -->
+
+<div th:fragment="userCard" class="card text-center user-card">
+    <script th:src="@{/js/userCard.js}"></script>
+    <div class="card-body">
+        <!-- TODO replace with pfp -->
+        <img class="card-title" th:src="@{/images/default-icon.jpg}" width="50px" height="50px"/>
+        <p class="card-text"><a th:href="${'/accounts/view/' + viewing.getId()}" th:text="${viewing.getUsername()}"></a></p>
+        <a class="btn btn-secondary" th:id="${'unfollow-' + viewing.getId()}" th:data-userId="${viewing.getId()}" onmouseenter="mouseEnter(this.getAttribute('data-userId'))" onmouseleave="mouseLeave(this.getAttribute('data-userId'))" onclick="unfollow(this.getAttribute('data-userId'))">Following</a>
+    </div>
+</div>

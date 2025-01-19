@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/defaultLayout}">
+
+    <body class="mainBody" layout:fragment="content">
+		<div class="d-flex flex-lg-row flex-column">
+			<div class="postBox col-lg-9 col-12" th:classappend="${followedUsers.size() == 0 ? 'text-center' : ''}">
+				<!--th:with="email = ${email}"-->
+                <h2 class="opacity-50 align-self-center pt-5" th:if="${followedUsers.size() == 0}">You aren't following anyone!</h2>
+				<div id="posts" th:each="post : ${posts}">
+					<div th:replace="~{layouts/postPreview :: post}"></div>
+				</div>
+			</div>
+			<div class="searchBox col-lg-3 col-12 px-2 text-center d-flex flex-column gap-2">
+
+                <h5 class="searchText">Following</h5>
+                <h5 class="opacity-50" th:if="${followedUsers.size() == 0}">You aren't following anyone!</h5>
+                <div th:each="viewing : ${followedUsers}">
+                    <div th:replace="~{layouts/userCard :: userCard}"></div>
+                </div>
+			</div>
+    </body>
+
+</html>

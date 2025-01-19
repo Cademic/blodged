@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/noNav}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body class="loginBody">
+
+    <div class="row loginBoxes" layout:fragment="content">
+        <div class="col-sm-6">
+            <div class="card cardLeft">
+                <div class="card-body">
+                    <br>
+                    <br>
+                    <h5 class="card-title card-titleH2">Welcome To</h5>
+                    
+                    <img class="imgName" src="/resources/Blodged_Trans.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <br>
+                    <h5 class="card-title card-titleH2">Sign Up</h5>
+                    <br>
+                    <form th:action="@{register}" th:object="${registerModel}" method="post" class="text-center">
+                        <input type="text" class="form-control loginInputs" id="registerEmail"
+                            placeholder="name@example.com" th:field="*{email}">
+                        <br>
+                        <input type="password" class="form-control loginInputs" id="registerPassword"
+                            placeholder="Enter Password..." th:field="*{password}">
+                        <br>
+                        <input type="text" class="form-control loginInputs" id="registerUsername"
+                            placeholder="Enter Username" th:field="*{username}">
+                        <br>
+                        <p th:each="err : ${#fields.errors('*')}" th:if="${#fields.hasErrors('*')}" th:text="${err}"></p>
+                    <br>
+                    <button type="submit" class="loginBtns">Create</button>
+                    <br>
+            </form>
+                    <p class="otherSigninOption">
+                        <a th:href=@{/accounts/login} href="">Already have an account?</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!--
+    <div layout:fragment="content" class="mt-3 h-100 w-100 d-flex flex-row align-items-center justify-content-center">
+        <div class="col-6 h-100 d-lg-block d-none text-center">
+            <h1 class="align-middle">WELCOME TO WEBSITE</h1>
+        </div>
+        <div class="col-lg-6 col-12 h-100 align-items-center">
+            <h3 class="d-lg-none d-block text-center">WELCOME TO WEBSITE</h3>
+            <h3 class="text-center">SIGN UP</h3>
+            <form th:action="@{register}" th:object="${registerModel}" method="post" class="d-flex flex-column gap-3 align-items-center justify-content-center">
+                <div class="d-flex flex-lg-row flex-column align-items-center justify-content-center col-lg-8 gap-lg-2 col-10">
+                    <label for="registerEmail" class="col-form-label col-lg-3 col-4">Email Address</label>
+                    <input type="text" class="form-control col-10" id="registerEmail" placeholder="name@example.com" th:field="*{email}">
+                </div>
+                <div class="d-flex flex-lg-row flex-column align-items-center justify-content-center col-lg-8 gap-lg-2 col-10">
+                    <label for="registerUsername" class="col-form-label col-lg-3 col-4">Password</label>
+                    <input type="password" class="form-control col-10" id="registerUsername" placeholder="Enter Password..." th:field="*{password}">
+                </div>
+                <div class="d-flex flex-lg-row flex-column align-items-center justify-content-center col-lg-8 gap-lg-2 col-10">
+                    <label for="registerUsername" class="col-form-label col-lg-3 col-4">Username</label>
+                    <input type="text" class="form-control col-10" id="registerUsername" placeholder="Enter Username" th:field="*{username}">
+                </div>
+                <div th:each="err : ${#fields.errors('*')}" th:if="${#fields.hasErrors('*')}" th:text="${err}" class="d-flex flex-column gap-3">
+                    <span th:text="${err}" style="color:red;"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block col-10">Register</button>
+                <a th:href=@{/accounts/login} class="btn btn-primary btn-block col-10">Login Instead</a>
+            </form>
+        </div>
+    
+    -->
+
+</body>
+
+</html>
