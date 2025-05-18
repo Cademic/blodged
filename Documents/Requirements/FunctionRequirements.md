@@ -73,7 +73,7 @@ To allow users to personalize their profile with preset profile pictures.
 ### Requirements
 | FR ID | Description |
 |-------|-------------|
-|FR 6.1 | Users shall be able to select from at least 10 preset profile pictures. |
+|FR 6.1 | Users shall be able to select from at least 5 preset profile pictures. |
 |FR 6.2 | The system shall display the user's current profile picture in settings. |
 |FR 6.3 | Profile picture changes shall be reflected throughout the application. |
 |FR 6.4 | Profile pictures shall be displayed next to username in posts and comments. |
