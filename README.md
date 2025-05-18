@@ -2,6 +2,33 @@
 
 This project is a continuation of the group application built in CST-339 (Java III) at Grand Canyon University. My goal for this continuation is to update the current structure to fit a communication website specifictally for coders with real-time updates on post, replies, and follows! I also plan to add daily coding challenges and other fun features to keep users intertained!
 
+## Layout
+```
+src/
+  assets/
+  components/
+    common/         # Reusable UI components (Button, Modal, etc.)
+    posts/          # Post-related components
+    user/           # User profile, settings, etc.
+    notifications/  # Notification components
+  pages/
+    Home.vue
+    Login.vue
+    Register.vue
+    Settings.vue
+    Admin.vue
+    Messages.vue
+    NotFound.vue
+  router/
+    index.ts
+  store/
+    index.ts        # Pinia or Vuex store setup
+  api/
+    index.ts        # API request functions
+  App.vue
+  main.ts
+```
+
 ## Goals
 - Remove exsisting html and replace frontend with Typescript or Vue.js
 - Update UI to a more modern, coding look
