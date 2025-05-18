@@ -1,0 +1,13 @@
+com.gcu
+com.gcu.business
+com.gcu.config
+com.gcu.controller
+com.gcu.controller.REST
+com.gcu.controller.util
+com.gcu.data.entities
+com.gcu.data.entities.metadata
+com.gcu.data.repository
+com.gcu.data.service
+com.gcu.model.db
+com.gcu.model.db.metadata
+com.gcu.model.request
