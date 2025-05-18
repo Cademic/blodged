@@ -91,6 +91,21 @@ To keep users informed about interactions with their content and activity from a
 |FR 7.3 | Users shall be able to view all notifications in a dedicated notifications center. |
 |FR 7.4 | Users shall be able to configure which types of notifications they receive. |
 
+## US-8: Real-time Updated Messages
+
+### Purpose
+To enable instant communication between users with real-time message updates.
+
+### Requirements
+| FR ID | Description |
+|-------|-------------|
+|FR 8.1 | The system shall update message content in real-time without requiring page refresh. |
+|FR 8.2 | Messages shall be delivered to recipients within 2 seconds of being sent. |
+|FR 8.3 | The system shall provide visual indicators when messages are being typed, sent, delivered, and read. |
+|FR 8.4 | Users shall be able to see when other users are actively typing a message. |
+|FR 8.5 | The messaging interface shall support text, emoji, and basic formatting options. |
+|FR 8.6 | The system shall maintain message history and allow users to scroll through previous messages. |
+
 ## Admin-1: Moderation Page
 
 ### Purpose
