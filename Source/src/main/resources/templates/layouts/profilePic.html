@@ -1,0 +1,1 @@
+<img th:fragment="profilePic(user, width, height)" src="../../static/images/default-icon.jpg" th:width="${width}" th:height="${height}" th:src="${@userUtil.gravatarURL(user)}">

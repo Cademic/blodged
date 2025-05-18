@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{layouts/scripts :: scripts}"></head>
+<body>
+    <section th:replace="~{layouts/nav :: header}">Error: Navbar template not found</section>
+    <section layout:fragment="content">
+        <h1>Site Content</h1>
+    </section>
+</body>
+</html>
