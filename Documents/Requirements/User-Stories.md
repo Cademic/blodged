@@ -13,6 +13,7 @@ This document contains the starting outline of what users / admins will expect, 
 | 5 | As a user I want to view settings | Convert edit profile to settings for better user customizability | $${\color{orange}Medium}$$ | ... |
 | 6 | As a user I want to change my profile picture | Add preset profile pictures and allow users to change to them | $${\color{lightblue}Low}$$ | ... |
 | 7 | As a user I want to get notification | From other accounts, replys, etc. | $${\color{orange}Medium}$$ | ... |
+| 8 | As a user I want real-time updated messages | Implement real-time messaging with instant updates | $${\color{red}High}$$ | Essential for user communication |
 
 ## Admin Stories
 
