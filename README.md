@@ -6,6 +6,13 @@ This project is a continuation of the group application built in CST-339 (Java I
 - Remove exsisting html and replace frontend with Typescript or Vue.js
 - Update UI to a more modern, coding look
 - Implement the exsisting Spring Boot Java as the backend
+
+## To-Do
+- Change login/register page to use a modal ontop of the home page
+- Deploy SQL database to cloud
+- Change UI Theme
+- Add settings Page\
+`(find more details in the links below)`
 ---
 ### Check out the [User Stories](Documents/Requirements/User-Stories.md)
 ### Check out the [Functional Requirements](Documents/Requirements/FunctionalRequirements.md)
