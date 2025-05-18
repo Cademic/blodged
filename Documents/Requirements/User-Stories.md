@@ -12,6 +12,7 @@ This document contains the starting outline of what users / admins will expect, 
 | 4 | As a user I want to login and logout of my account | Fix login and register pages / update logout functionality | $${\color{lightblue}Low}$$ | ... |
 | 5 | As a user I want to view settings | Convert edit profile to settings for better user customizability | $${\color{orange}Medium}$$ | ... |
 | 6 | As a user I want to change my profile picture | Add preset profile pictures and allow users to change to them | $${\color{lightblue}Low}$$ | ... |
+| 7 | As a user I want to get notification | From other accounts, replys, etc. | $${\color{orange}Medium}$$ | ... |
 
 ## Admin Stories
 
