@@ -29,6 +29,35 @@ src/
   main.ts
 ```
 
+## Backend Layout
+```
+Backend/
+└── blodged-backend/
+    ├── pom.xml
+    └── src/
+        ├── main/
+        │   ├── java/
+        │   │   └── com/
+        │   │       └── blodged/
+        │   │           ├── BlodgedBackendApplication.java
+        │   │           ├── config/           # Security, JWT, CORS, etc.
+        │   │           ├── controller/       # REST controllers (UserController, PostController, etc.)
+        │   │           ├── dto/              # Data Transfer Objects (UserDTO, AuthRequest, etc.)
+        │   │           ├── entity/           # JPA entities (User, Post, Reply, etc.)
+        │   │           ├── exception/        # Custom exceptions and handlers
+        │   │           ├── repository/       # Spring Data JPA repositories
+        │   │           ├── security/         # JWT filters, providers, etc.
+        │   │           └── service/          # Business logic (UserService, PostService, etc.)
+        │   └── resources/
+        │       ├── application.properties
+        │       └── static/                   # Static files (if any)
+        └── test/
+            └── java/
+                └── com/
+                    └── blodged/
+                        └── ...               # Unit and integration tests
+```
+
 ## Goals
 - Remove exsisting html and replace frontend with Typescript or Vue.js
 - Update UI to a more modern, coding look
