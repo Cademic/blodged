@@ -1,0 +1,159 @@
+/* Blodged styles ported from backend */
+.loginBody {
+	overflow: hidden;
+	height: 100vh;
+	margin: 0;
+	background-image: url(/resources/blodged_big_puddle_blur\ \(1\).png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: "Fredoka";
+}
+
+.mainBody {
+	margin: 0;
+	background-color: rgb(159, 135, 145);
+	font-family: "Fredoka";
+}
+
+.loginBoxes {
+	height: 100vh;
+	align-content: center;
+	justify-content: center;
+	margin-top: 10vh;
+	width: 80%;
+	max-width: 1000px;
+	margin: auto;
+	z-index: 2;
+}
+
+a {
+	color: black;
+}
+
+.card {
+	box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.19), 0 20px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
+	background-color: rgba(230, 230, 230, .75)
+}
+
+.card-title {
+	font-family: "Fredoka";
+	font-size: 40pt;
+	text-align: center;
+}
+
+.loginInputs {
+	width: 80%;
+	margin: auto;
+}
+
+.loginBtns {
+	border: 1px solid darkslategray;
+	background-color: #4785bb;
+	width: 100%;
+	margin: auto;
+	padding: .5rem;
+	border-radius: 7px;
+}
+
+.loginBtns:hover {
+	background-color: #2c73b1;
+}
+
+.loginBtns:active {
+	background-color: #19578e;
+}
+
+.loginBtns:focus {
+	border: solid 1px black;
+}
+
+.otherSigninOption {
+	text-align: center;
+	margin-top: .5rem;
+}
+
+.postBox {
+	height: calc(100vh - 56px);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.searchBox {
+	background-color: #F8F9FA;
+	position: sticky;
+	height: calc(100vh - 56px);
+	top: 0;
+}
+
+.searchText {
+	text-align: center;
+	margin-top: 4rem;
+	font-family: "Fredoka";
+	font-size: 48px;
+}
+
+.create {
+	max-width: 85%;
+	margin: auto;
+	margin-top: 2rem;
+}
+.createBtn {
+	border: 1px solid darkslategray;
+	background-color: #4785bb;
+	padding: .5rem;
+	border-radius: 7px;
+	width: 100%;
+}
+
+.createBtn:hover {
+	background-color: #2c73b1;
+}
+
+.createBtn:active {
+	background-color: #19578e;
+}
+
+.createBtn:focus {
+	border: solid 1px black;
+}
+
+.disabledBtn {
+	border: 1px solid darkslategray;
+	background-color: #4785bb;
+	padding: .5rem;
+	border-radius: 7px;
+	width: 100%;
+	color: #000000;
+}
+
+.search {
+	margin-top: 5rem;
+}
+
+.searchBtn {
+	border: 1px solid darkslategray;
+	background-color: #4785bb;
+	width: 100%;
+	margin: auto;
+	padding: .5rem;
+	border-radius: 7px;
+}
+
+.searchBtn:hover {
+	background-color: #2c73b1;
+}
+
+.searchBtn:active {
+	background-color: #19578e;
+}
+
+.searchBtn:focus {
+	border: solid 1px black;
+}
+
+.error {
+	color: red;
+	display: none;
+} 
