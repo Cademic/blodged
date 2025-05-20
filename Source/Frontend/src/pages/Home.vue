@@ -185,8 +185,8 @@ const showDeleteConfirm = ref(false)
 const isDeleting = ref(false)
 
 // Fetch posts when component is mounted
-onMounted(async () => {
-  await fetchPosts()
+onMounted(() => {
+  fetchPosts()
 })
 
 async function fetchPosts() {
@@ -229,8 +229,23 @@ async function fetchPosts() {
       }
     }
   } catch (e: any) {
-    error.value = e.message || 'Failed to load posts'
-    posts.value = []
+    console.error('Error fetching posts:', e)
+    
+    // Check if the error is about server starting up
+    if (e.message && (
+        e.message.includes('starting up') || 
+        e.message.includes('invalid data') || 
+        e.message.includes('Unexpected token')
+      )) {
+      console.log('Server is starting up. Automatically reloading page in 2 seconds...')
+      error.value = 'Server is starting up. Reloading page in 2 seconds...'
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    } else {
+      error.value = e.message || 'Failed to load posts'
+      posts.value = []
+    }
   } finally {
     loading.value = false
   }

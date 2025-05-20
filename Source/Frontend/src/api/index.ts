@@ -63,9 +63,21 @@ async function apiRequest<T>(
     return {} as T
   }
   
+  // Check if response is HTML (common error during initial load)
+  const contentType = response.headers.get('content-type')
+  if (contentType && contentType.includes('text/html')) {
+    console.warn('Server returned HTML instead of JSON. Server might still be starting up.')
+    throw new Error('Server is starting up. Please try again in a moment.')
+  }
+  
   // Parse JSON response
-  const data = await response.json()
-  return data as T
+  try {
+    const data = await response.json()
+    return data as T
+  } catch (jsonError) {
+    console.error('Error parsing JSON response:', jsonError)
+    throw new Error('Server returned invalid data. It might still be starting up. Please refresh the page.')
+  }
 }
 
 /**
@@ -278,7 +290,20 @@ export async function getPostsApi() {
       throw new Error(errorText || 'Failed to fetch posts');
     }
     
-    const data = await res.json();
+    // Check if response is HTML (common error during initial load)
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      console.warn('Server returned HTML instead of JSON. Server might still be starting up.');
+      throw new Error('Server is starting up. Please try again in a moment.');
+    }
+    
+    let data;
+    try {
+      data = await res.json();
+    } catch (jsonError) {
+      console.error('Error parsing JSON response:', jsonError);
+      throw new Error('Server returned invalid data. It might still be starting up. Please refresh the page.');
+    }
     
     // If we have posts and likes data
     if (data.posts && data.likes) {
