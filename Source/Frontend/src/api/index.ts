@@ -10,6 +10,7 @@ export interface UserProfile {
   followedByCount?: number;
   followingCount?: number;
   likesGiven?: number;
+  isPrivate?: boolean;
 }
 
 export interface PostMetadata {
@@ -549,5 +550,194 @@ export async function checkPostLike(postId: number): Promise<boolean> {
   } catch (error) {
     console.error('Error checking post like:', error);
     return false;
+  }
+}
+
+/**
+ * Update user profile information
+ */
+export async function updateUserProfile(userId: number, key: string, value: string): Promise<void> {
+  try {
+    const userStore = useUserStore()
+    
+    // Default headers
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    }
+    
+    // Add auth token if available
+    if (userStore.token) {
+      headers['Authorization'] = `Bearer ${userStore.token}`
+    }
+    
+    const response = await fetch('/accounts/updateUser', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        userId,
+        keyToUpdate: key,
+        valueToUpdate: value
+      })
+    })
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(errorText || `API error: ${response.status}`)
+    }
+    
+    // Check if there's actually content to parse
+    const contentType = response.headers.get('content-type')
+    const contentLength = response.headers.get('content-length')
+    const isEmpty = contentLength === '0' || !contentType?.includes('application/json')
+    
+    // If response is empty or not JSON, just return
+    if (isEmpty) {
+      return
+    }
+    
+    // Otherwise parse the response as JSON
+    await response.json()
+    return
+  } catch (error) {
+    console.error('Error updating user profile:', error)
+    throw error
+  }
+}
+
+/**
+ * Change user password
+ */
+export async function changePassword(userId: number, currentPassword: string, newPassword: string): Promise<void> {
+  try {
+    // First authenticate with current password
+    const authenticated = await authenticatePassword(userId, currentPassword)
+    
+    if (!authenticated) {
+      throw new Error('Current password is incorrect')
+    }
+    
+    // Then update to new password
+    await updateUserProfile(userId, 'password', newPassword)
+  } catch (error) {
+    console.error('Error changing password:', error)
+    throw error
+  }
+}
+
+/**
+ * Authenticate user with password
+ */
+export async function authenticatePassword(userId: number, password: string): Promise<boolean> {
+  try {
+    const userStore = useUserStore()
+    
+    // Default headers
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    }
+    
+    // Add auth token if available
+    if (userStore.token) {
+      headers['Authorization'] = `Bearer ${userStore.token}`
+    }
+    
+    const response = await fetch('/accounts/auth', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        userId,
+        password
+      })
+    })
+    
+    if (!response.ok) {
+      // If status is 401 Unauthorized, it means invalid password
+      if (response.status === 401) {
+        return false
+      }
+      
+      const errorText = await response.text()
+      throw new Error(errorText || `API error: ${response.status}`)
+    }
+    
+    // Check if there's actually content to parse
+    const contentType = response.headers.get('content-type')
+    const contentLength = response.headers.get('content-length')
+    const isEmpty = contentLength === '0' || !contentType?.includes('application/json')
+    
+    // If response is empty or not JSON, just assume success
+    if (isEmpty) {
+      return true
+    }
+    
+    // Otherwise parse the response as JSON (not likely needed for auth)
+    await response.json()
+    return true
+  } catch (error) {
+    // If there's a parsing error but the response was OK, consider it valid
+    if (error instanceof SyntaxError || 
+        (error instanceof Error && error.message.includes('Server returned invalid data'))) {
+      return true
+    }
+    console.error('Error authenticating password:', error)
+    throw error
+  }
+}
+
+/**
+ * Delete user account
+ */
+export async function deleteUserAccount(userId: number, password: string, deletePosts: boolean = true): Promise<void> {
+  try {
+    // First authenticate
+    const authenticated = await authenticatePassword(userId, password)
+    
+    if (!authenticated) {
+      throw new Error('Password is incorrect')
+    }
+    
+    // Then delete account
+    const userStore = useUserStore()
+    
+    // Default headers
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    }
+    
+    // Add auth token if available
+    if (userStore.token) {
+      headers['Authorization'] = `Bearer ${userStore.token}`
+    }
+    
+    const response = await fetch('/accounts/delete', {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify({
+        userId,
+        deletePosts
+      })
+    })
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(errorText || `API error: ${response.status}`)
+    }
+    
+    // Check if there's actually content to parse
+    const contentType = response.headers.get('content-type')
+    const contentLength = response.headers.get('content-length')
+    const isEmpty = contentLength === '0' || !contentType?.includes('application/json')
+    
+    // If response is empty or not JSON, just return
+    if (isEmpty) {
+      return
+    }
+    
+    // Otherwise parse the response as JSON
+    await response.json()
+    return
+  } catch (error) {
+    console.error('Error deleting account:', error)
+    throw error
   }
 } 
