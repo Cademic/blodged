@@ -29,8 +29,11 @@
 			<div class="searchBox col-lg-3 col-12">
 				<div style="margin: auto; width: 18rem;"
 					class="accountOptions mt-3 pt-3 pb-5 mb-3 align-items-center d-flex flex-column gap-3">
-					<!-- TODO replace with profile pic -->
-					<img th:replace="layouts/profilePic.html :: profilePic(${viewing}, 60, 60)"/>
+					<!-- Commented out profile pic for now -->
+					<!-- <img th:replace="layouts/profilePic.html :: profilePic(${viewing}, 60, 60)"/> -->
+					<!-- Simple placeholder instead -->
+					<img th:src="@{/images/default-icon.jpg}" width="60" height="60" alt="Default profile" />
+					
 					<h2><a th:text="${viewing.getUsername()}" th:href="${'/accounts/view/' + viewing.getId()}"/></h2>
 					<div class="card text-center user-card" style="width: 16rem !important;">
 						<div class="card-header">

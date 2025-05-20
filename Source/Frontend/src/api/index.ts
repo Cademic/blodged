@@ -17,6 +17,15 @@ export interface PostMetadata {
   postContent: string;
   authorUsername: string;
   likeCount: number;
+  replyCount: number;
+  isLiked?: boolean;
+}
+
+export interface ReplyMetadata {
+  id: number;
+  replyContent: string;
+  replyAuthorUsername: string;
+  postId: number;
 }
 
 /**
@@ -111,12 +120,75 @@ export async function unfollowUser(userId: number): Promise<void> {
 }
 
 /**
- * Like a post
+ * Like a post (uses standard controller endpoint)
  */
 export async function likePost(postId: number): Promise<void> {
-  return apiRequest<void>(`/api/posts/like/${postId}`, {
-    method: 'POST'
-  })
+  try {
+    const userStore = useUserStore();
+    
+    // If not logged in, abort
+    if (!userStore.isLoggedIn || !userStore.user) {
+      throw new Error('You must be logged in to like posts');
+    }
+
+    // Check if user has already liked this post
+    const alreadyLiked = await checkPostLike(postId);
+    if (alreadyLiked) {
+      console.log('User already liked this post, skipping like action');
+      return;
+    }
+    
+    // Using fetch directly instead of apiRequest to work with the non-REST endpoint
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/like/${postId}`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Like post failed:', errorText);
+      throw new Error(errorText || 'Failed to like post');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Like post error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Unlike a post (uses standard controller endpoint)
+ */
+export async function unlikePost(postId: number): Promise<void> {
+  try {
+    // Using fetch directly instead of apiRequest to work with the non-REST endpoint
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/unlike/${postId}`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Unlike post failed:', errorText);
+      throw new Error(errorText || 'Failed to unlike post');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Unlike post error:', error);
+    throw error;
+  }
 }
 
 /**
@@ -207,10 +279,212 @@ export async function getPostsApi() {
     }
     
     const data = await res.json();
+    
+    // If we have posts and likes data
+    if (data.posts && data.likes) {
+      // Map the posts with likes information
+      return data.posts.map((post: PostMetadata) => ({
+        ...post,
+        isLiked: data.likes[post.id] || false
+      }));
+    }
+    
     console.log('Posts fetched successfully:', data);
     return data;
   } catch (error) {
     console.error('Fetching posts error:', error);
     throw error;
+  }
+}
+
+/**
+ * Get replies for a specific post
+ */
+export async function getRepliesForPost(postId: number): Promise<ReplyMetadata[]> {
+  return apiRequest<ReplyMetadata[]>(`/api/replies/post/${postId}`)
+}
+
+/**
+ * Create a new reply to a post
+ */
+export async function createReply(postId: number, content: string): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    
+    // Create form data for the request
+    const formData = new FormData();
+    formData.append('replyContent', content);
+    // Add the 'post' parameter required by the backend
+    formData.append('post', 'post');
+    
+    const res = await fetch(`/replies/create/${postId}`, {
+      method: 'POST',
+      headers: { 
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: formData,
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Create reply failed:', errorText);
+      throw new Error(errorText || 'Failed to create reply');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Create reply error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Edit an existing reply
+ */
+export async function editReply(replyId: number, content: string): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/replies/edit/${replyId}`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: JSON.stringify({ content }),
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Edit reply failed:', errorText);
+      throw new Error(errorText || 'Failed to edit reply');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Edit reply error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a reply
+ */
+export async function deleteReply(replyId: number): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/replies/delete/${replyId}`, {
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Delete reply failed:', errorText);
+      throw new Error(errorText || 'Failed to delete reply');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Delete reply error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Edit an existing post
+ */
+export async function editPost(postId: number, content: string): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/posts/${postId}`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: JSON.stringify({ content }),
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Edit post failed:', errorText);
+      throw new Error(errorText || 'Failed to edit post');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Edit post error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a post
+ */
+export async function deletePost(postId: number): Promise<void> {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/posts/${postId}`, {
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      credentials: 'include',
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Delete post failed:', errorText);
+      throw new Error(errorText || 'Failed to delete post');
+    }
+    
+    return;
+  } catch (error) {
+    console.error('Delete post error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get count of replies for a post
+ */
+export async function getReplyCountForPost(postId: number): Promise<number> {
+  try {
+    const replies = await getRepliesForPost(postId);
+    return replies.length;
+  } catch (error) {
+    console.error(`Error getting reply count for post ${postId}:`, error);
+    return 0;
+  }
+}
+
+/**
+ * Check if current user has liked a post 
+ */
+export async function checkPostLike(postId: number): Promise<boolean> {
+  try {
+    const userStore = useUserStore();
+    
+    // If not logged in, user hasn't liked any posts
+    if (!userStore.isLoggedIn || !userStore.user) {
+      return false;
+    }
+    
+    // Get users who liked this post
+    const likers = await getPostLikes(postId);
+    
+    // Check if current user's username is in the likers list
+    return likers.includes(userStore.user.username);
+  } catch (error) {
+    console.error('Error checking post like:', error);
+    return false;
   }
 } 

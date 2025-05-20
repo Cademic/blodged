@@ -18,6 +18,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:8080',
+      '/like': 'http://localhost:8080',
+      '/unlike': 'http://localhost:8080',
+      '/replies': 'http://localhost:8080',
     },
   },
 })

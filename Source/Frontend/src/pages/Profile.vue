@@ -65,9 +65,12 @@
                 :class="{ 'liked': post.liked }"
                 @click="toggleLike(post)"
               >
-                <span class="like-icon">❤</span>
+                <img src="../assets/images/like.webp" alt="Like" class="like-img" />
                 <span class="like-count">{{ post.likeCount }}</span>
               </button>
+              <router-link :to="`/posts/view/${post.id}`" class="view-replies-link">
+                View all replies
+              </router-link>
             </div>
           </div>
         </div>
@@ -93,7 +96,9 @@ import {
   getFollowingByUsername,
   followUser,
   unfollowUser,
-  likePost
+  likePost,
+  unlikePost,
+  checkPostLike
 } from '../api'
 import type { UserProfile, PostMetadata } from '../api'
 import md5 from 'md5'
@@ -177,10 +182,9 @@ async function fetchUserData() {
     if (userStore.isLoggedIn && userStore.user && posts.value.length > 0) {
       for (const post of posts.value) {
         try {
-          const likers = await getPostLikes(post.id)
-          post.liked = likers.includes(userStore.user.username)
+          post.liked = await checkPostLike(post.id)
         } catch (err) {
-          console.error(`Error fetching likes for post ${post.id}:`, err)
+          console.error(`Error checking like status for post ${post.id}:`, err)
         }
       }
     }
@@ -271,14 +275,39 @@ async function toggleLike(post: Post) {
   }
   
   try {
-    await likePost(post.id)
+    // First, verify current like status
+    const currentLikeStatus = await checkPostLike(post.id)
+    
+    // If the display state doesn't match the actual state, fix it
+    if (post.liked !== currentLikeStatus) {
+      console.log('Fixing inconsistent like state')
+      post.liked = currentLikeStatus
+      // Refresh user data to get accurate like count
+      await fetchUserData()
+      return
+    }
+    
+    if (post.liked) {
+      await unlikePost(post.id)
+    } else {
+      await likePost(post.id)
+    }
     
     post.liked = !post.liked
     post.likeCount = post.liked 
       ? post.likeCount + 1 
       : post.likeCount - 1
+      
+    // Re-check like status from server to ensure consistency
+    setTimeout(async () => {
+      if (post && post.id) {
+        post.liked = await checkPostLike(post.id)
+      }
+    }, 500)
   } catch (err: any) {
     console.error('Like error:', err)
+    // Refresh user data on error to ensure UI is consistent
+    await fetchUserData()
   }
 }
 
@@ -492,19 +521,36 @@ onMounted(() => {
   background-color: #f0f0f0;
 }
 
-.like-icon {
-  color: #ccc;
-  font-size: 1.2rem;
+.like-img {
+  width: 20px;
+  height: 25px;
   transition: all 0.2s;
 }
 
-.liked .like-icon {
+.liked .like-img {
+  filter: brightness(0) saturate(100%) invert(62%) sepia(62%) saturate(7480%) hue-rotate(187deg) brightness(103%) contrast(106%);
+}
+
+.liked {
   color: #e53935;
+  font-weight: bold;
 }
 
 .like-count {
   font-size: 0.9rem;
   color: #666;
+}
+
+.view-replies-link {
+  margin-left: auto;
+  color: #6366F1;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+}
+
+.view-replies-link:hover {
+  text-decoration: underline;
 }
 
 .no-posts, .loading-posts {

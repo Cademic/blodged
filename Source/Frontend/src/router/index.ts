@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/admin', name: 'Admin', component: () => import('../pages/Admin.vue'), meta: { requiresAuth: true } },
   { path: '/messages', name: 'Messages', component: () => import('../pages/Messages.vue'), meta: { requiresAuth: true } },
   { path: '/posts/create', name: 'CreatePost', component: () => import('../pages/CreatePost.vue'), meta: { requiresAuth: true } },
+  { path: '/posts/view/:id', name: 'PostView', component: () => import('../pages/PostView.vue') },
   { path: '/profile/:username', name: 'Profile', component: () => import('../pages/Profile.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../pages/NotFound.vue') },
 ]

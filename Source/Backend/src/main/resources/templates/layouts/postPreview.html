@@ -11,7 +11,12 @@
 		}
 	</style>
 	<div class="post-head d-flex flex-row">
-			<img th:replace="layouts/profilePic.html :: profilePic(${post.getPostUser()}, 60, 60)"/>
+			<!-- Commented out profile pic for now -->
+			<!-- <img th:replace="layouts/profilePic.html :: profilePic(${post.getPostUser()}, 60, 60)"/> -->
+			
+			<!-- Simple placeholder instead -->
+			<img th:src="@{/images/default-icon.jpg}" width="60" height="60" alt="Default profile" />
+			
 			<a th:if="${post.getPostUser() == null}" class="postName me-auto col-8 no-link" th:text="${post.getPostUserName()}"></a>
 			<a th:if="${post.getPostUser() != null}" class="postName me-auto col-8" th:text="${post.getPostUserName()}" th:href="${'/accounts/view/' + post.getPostUser().getId()}"></a>
 		<div class="justify-self-end d-flex flex-row align-items-center gap-3">
