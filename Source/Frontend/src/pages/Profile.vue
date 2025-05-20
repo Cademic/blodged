@@ -1,110 +1,36 @@
 <template>
-  <div class="profile-container">
-    <div class="profile-content" v-if="user">
-      <!-- User Profile Header -->
-      <div class="profile-header">
-        <div class="profile-avatar">
-          <img :src="`https://gravatar.com/avatar/${hashEmail(user?.email)}?d=mp`" alt="Profile Picture">
-        </div>
-        <div class="profile-info">
-          <h1 class="profile-username">{{ user.username }}</h1>
-          <div class="profile-stats">
-            <div class="stat">
-              <span class="stat-count">{{ followersCount }}</span>
-              <span class="stat-label">Followers</span>
-            </div>
-            <div class="stat">
-              <span class="stat-count">{{ followingCount }}</span>
-              <span class="stat-label">Following</span>
-            </div>
-          </div>
-          <div class="profile-actions" v-if="user.id !== currentUserId">
-            <button 
-              class="btn" 
-              :class="{ 'btn-primary': !isFollowing, 'btn-secondary': isFollowing }"
-              @click="toggleFollow"
-            >
-              {{ isFollowing ? 'Following' : 'Follow' }}
-            </button>
-          </div>
-          <div class="profile-actions" v-else>
-            <router-link to="/settings" class="btn btn-primary">Edit Profile</router-link>
-          </div>
-        </div>
-      </div>
-      
-      <!-- User Bio Card -->
-      <div class="bio-card">
-        <div class="bio-header">About Me</div>
-        <div class="bio-content">
-          <p v-if="user.bio">{{ user.bio }}</p>
-          <p class="empty-bio" v-else>This user hasn't written a bio!</p>
-        </div>
-        <div class="bio-footer">
-          Member since {{ formatDate(user.createdDate || new Date()) }}
-        </div>
-      </div>
-      
-      <!-- User Posts -->
-      <div class="posts-container">
-        <h2 class="posts-title">Posts</h2>
-        <div v-if="loading" class="loading-posts">Loading posts...</div>
-        <div v-else-if="posts.length === 0" class="no-posts">
-          This user hasn't posted anything yet.
-        </div>
-        <div v-else class="posts-list">
-          <div v-for="post in posts" :key="post.id" class="post-card">
-            <div class="post-header">
-              <img :src="`https://gravatar.com/avatar/${hashEmail(user?.email)}?d=mp&s=40`" alt="Avatar" class="post-avatar">
-              <div class="post-author">{{ user.username }}</div>
-            </div>
-            <div class="post-content">{{ post.postContent }}</div>
-            <div class="post-footer">
-              <button 
-                class="like-button" 
-                :class="{ 'liked': post.liked }"
-                @click="toggleLike(post)"
-              >
-                <img src="../assets/images/like.webp" alt="Like" class="like-img" />
-                <span class="like-count">{{ post.likeCount }}</span>
-              </button>
-              <router-link :to="`/posts/view/${post.id}`" class="view-replies-link">
-                View all replies
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div v-else class="profile-loading">
-      <div v-if="error" class="error-message">{{ error }}</div>
-      <div v-else>Loading profile...</div>
-    </div>
-  </div>
+    <div class="profile-container">    <div class="profile-content" v-if="user">      <!-- User Profile Header -->      <div class="profile-header">        <div class="profile-avatar">          <img :src="`https://gravatar.com/avatar/${hashEmail(user?.email)}?d=mp`" alt="Profile Picture">        </div>        <div class="profile-info">          <h1 class="profile-username">{{ user.username }}</h1>          <div class="profile-stats">            <div class="stat">              <span class="stat-count">{{ followersCount }}</span>              <span class="stat-label">Followers</span>            </div>            <div class="stat">              <span class="stat-count">{{ followingCount }}</span>              <span class="stat-label">Following</span>            </div>          </div>          <div class="profile-actions" v-if="user.id !== currentUserId">            <button               class="btn"               :class="{ 'btn-primary': !isFollowing, 'btn-secondary': isFollowing }"              @click="toggleFollow"              @mouseenter="followBtnHover"              @mouseleave="followBtnHover"            >              {{ followBtnText }}            </button>          </div>          <div class="profile-actions" v-else>            <router-link to="/settings" class="btn btn-primary">Edit Profile</router-link>          </div>        </div>      </div>            <!-- User Bio Card -->      <div class="bio-card">        <div class="bio-header">About Me</div>        <div class="bio-content">          <p v-if="user.bio">{{ user.bio }}</p>          <p class="empty-bio" v-else>This user hasn't written a bio!</p>        </div>        <div class="bio-footer">          Member since {{ formatDate(user.createdDate || new Date()) }}        </div>      </div>            <!-- Profile content layout -->      <div class="profile-layout">        <!-- Left side: Posts -->        <div class="posts-container">          <h2 class="posts-title">Posts</h2>          <div v-if="loading" class="loading-posts">Loading posts...</div>          <div v-else-if="posts.length === 0" class="no-posts">            This user hasn't posted anything yet.          </div>          <div v-else class="posts-list">            <div v-for="post in posts" :key="post.id" class="post-card">              <div class="post-header">                <img :src="`https://gravatar.com/avatar/${hashEmail(user?.email)}?d=mp&s=40`" alt="Avatar" class="post-avatar">                <div class="post-author">{{ user.username }}</div>              </div>              <div class="post-content">{{ post.postContent }}</div>              <div class="post-footer">                <button                   class="like-button"                   :class="{ 'liked': post.liked }"                  @click="toggleLike(post)"                >                  <img src="../assets/images/like.webp" alt="Like" class="like-img" />                  <span class="like-count">{{ post.likeCount }}</span>                </button>                <router-link :to="`/posts/view/${post.id}`" class="view-replies-link">                  View all replies                </router-link>              </div>            </div>          </div>        </div>                <!-- Right side: Following users -->        <div class="following-container">          <h2 class="following-title">Following</h2>          <div v-if="loadingFollowing" class="loading-following">Loading...</div>          <div v-else-if="followingUsers.length === 0" class="no-following">            <p>{{ user.username }} isn't following anyone yet.</p>          </div>          <div v-else class="following-list">            <UserCard               v-for="followedUser in followingUsers"               :key="followedUser.id"               :user="followedUser"               :is-following="true"              :show-follow-button="userStore.isLoggedIn && user.id === currentUserId"              @follow-changed="handleFollowChanged"            />          </div>        </div>      </div>    </div>        <div v-else class="profile-loading">      <div v-if="error" class="error-message">{{ error }}</div>      <div v-else>Loading profile...</div>    </div>  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '../store/user'
-import { 
-  getUserByUsername, 
-  getPostsByUsername, 
-  getPostLikes, 
-  getFollowedByUsername, 
+import {
+  getUserByUsername,
+  getPostsByUsername,
+  getPostLikes,
+  getFollowedByUsername,
   getFollowingByUsername,
   followUser,
   unfollowUser,
   likePost,
   unlikePost,
-  checkPostLike
+  checkPostLike,
+  getAllUsers
 } from '../api'
 import type { UserProfile, PostMetadata } from '../api'
 import md5 from 'md5'
+import UserCard from '../components/UserCard.vue'
 
 interface Post extends PostMetadata {
-  liked: boolean;
+  liked: boolean
+}
+
+interface FollowingUser {
+  id: number
+  username: string
+  email?: string
 }
 
 const route = useRoute()
@@ -119,6 +45,9 @@ const error = ref('')
 const isFollowing = ref(false)
 const followersCount = ref(0)
 const followingCount = ref(0)
+const followingUsers = ref<FollowingUser[]>([])
+const loadingFollowing = ref(true)
+const followBtnText = ref('Follow')
 
 // Computed
 const currentUserId = computed(() => userStore.user?.id || 0)
@@ -189,7 +118,7 @@ async function fetchUserData() {
       }
     }
     
-    // Fetch follow counts
+    // Fetch follow counts and check following status
     try {
       const followers = await getFollowedByUsername(username)
       followersCount.value = followers.length
@@ -197,14 +126,22 @@ async function fetchUserData() {
       // Check if current user is following this profile
       if (userStore.isLoggedIn && userStore.user && followers.includes(userStore.user.username)) {
         isFollowing.value = true
+        followBtnText.value = 'Following'
+      } else {
+        isFollowing.value = false
+        followBtnText.value = 'Follow'
       }
       
       const following = await getFollowingByUsername(username)
       followingCount.value = following.length
+      
+      // Fetch following users details
+      await fetchFollowingUsers(username)
     } catch (err) {
       console.error('Error fetching follow data:', err)
       followersCount.value = 0
       followingCount.value = 0
+      followingUsers.value = []
     }
     
   } catch (err: any) {
@@ -253,14 +190,21 @@ async function toggleFollow() {
   try {
     if (isFollowing.value) {
       await unfollowUser(userId)
+      followBtnText.value = 'Follow'
     } else {
       await followUser(userId)
+      followBtnText.value = 'Following'
     }
     
     isFollowing.value = !isFollowing.value
     followersCount.value = isFollowing.value 
-      ? followersCount.value + 1 
-      : followersCount.value - 1
+       ? followersCount.value + 1 
+       : followersCount.value - 1
+    
+    // Refresh following users list if we're on our own profile
+    if (user.value?.id === currentUserId.value) {
+      await fetchFollowingUsers(username)
+    }
   } catch (err: any) {
     console.error('Follow error:', err)
     error.value = err.message || 'Failed to update follow status'
@@ -314,7 +258,7 @@ async function toggleLike(post: Post) {
 // Helper functions
 function hashEmail(email: string | undefined) {
   if (!email) {
-    return 'default-avatar-hash'; // Return a default hash if email is undefined
+    return 'default-avatar-hash' // Return a default hash if email is undefined
   }
   return md5(email.trim().toLowerCase())
 }
@@ -325,6 +269,58 @@ function formatDate(dateString: string | Date) {
     month: 'long',
     day: 'numeric'
   })
+}
+
+// Handle follow button hover (change text between Following/Unfollow)
+function followBtnHover() {
+  if (!isFollowing.value) return
+  
+  followBtnText.value = followBtnText.value === 'Following' ? 'Unfollow' : 'Following'
+}
+
+// Handle follow/unfollow changes from UserCard components
+function handleFollowChanged(event: { userId: number; isFollowing: boolean }) {
+  // Update following count
+  followingCount.value = event.isFollowing 
+    ? followingCount.value 
+    : followingCount.value - 1
+  
+  // Remove user from following list if unfollowed
+  if (!event.isFollowing) {
+    followingUsers.value = followingUsers.value.filter(u => u.id !== event.userId)
+  }
+}
+
+// Fetch following users
+async function fetchFollowingUsers(username: string) {
+  loadingFollowing.value = true
+  
+  try {
+    // Get usernames of followed users
+    const followingUsernames = await getFollowingByUsername(username)
+    
+    if (followingUsernames.length === 0) {
+      followingUsers.value = []
+      return
+    }
+    
+    // Get all users to find details about the followed users
+    const allUsers = await getAllUsers()
+    
+    // Filter out users that match the following usernames
+    followingUsers.value = allUsers.filter((u: any) => 
+      followingUsernames.includes(u.username)
+    ).map((u: any) => ({
+      id: u.id,
+      username: u.username,
+      email: u.email
+    }))
+  } catch (err) {
+    console.error('Error fetching following users:', err)
+    followingUsers.value = []
+  } finally {
+    loadingFollowing.value = false
+  }
 }
 
 // Load data on component mount
@@ -340,11 +336,7 @@ onMounted(() => {
   padding: 0 1rem;
 }
 
-.profile-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+.profile-content {  display: flex;  flex-direction: column;  gap: 2rem;}.profile-layout {  display: flex;  flex-direction: row;  gap: 2rem;}
 
 .profile-header {
   display: flex;
@@ -572,15 +564,5 @@ onMounted(() => {
   color: #e53935;
 }
 
-@media (max-width: 768px) {
-  .profile-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-  
-  .profile-stats {
-    justify-content: center;
-  }
-}
+@media (max-width: 768px) {  .profile-header {    flex-direction: column;    text-align: center;    gap: 1rem;  }    .profile-stats {    justify-content: center;  }    .profile-layout {    flex-direction: column;  }}.following-container {  flex: 1;  max-width: 300px;}.following-title {  font-size: 1.5rem;  color: #333;  margin-bottom: 1rem;}.posts-container {  flex: 2;}.no-following, .loading-following {  background: white;  border-radius: 8px;  padding: 1.5rem;  text-align: center;  color: #666;  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);}
 </style> 

@@ -21,6 +21,7 @@ export default defineConfig({
       '/like': 'http://localhost:8080',
       '/unlike': 'http://localhost:8080',
       '/replies': 'http://localhost:8080',
+      '/accounts': 'http://localhost:8080',
     },
   },
 })

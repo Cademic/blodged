@@ -222,7 +222,7 @@ public class AccountsController {
     @PostMapping("/unfollow")
     public ResponseEntity<?> unfollow(@RequestBody FollowPostModel entity) {
         if (auth.isLoggedIn()) {
-            followsBusinessService.unfollow(auth.getLoggedInUser().getId(),entity.getUserToFollow());
+            followsBusinessService.unfollow(auth.getLoggedInUser().getId(), entity.getUserToFollow());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Not authorized!", HttpStatus.UNAUTHORIZED);

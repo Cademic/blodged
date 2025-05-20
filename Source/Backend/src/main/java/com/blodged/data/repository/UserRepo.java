@@ -87,12 +87,12 @@ public interface UserRepo extends CrudRepository<UserEntity, Long> {
      * @param username the username of the user who is followed
      * @return a list of the usernames following that user
      */
-    @Query(value = "SELECT j.username as username FROM follows " +
+    @Query(value = "SELECT i.username as username FROM follows " +
             "LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as i " +
             "ON follows.user_following = i.user_id " +
             "LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as j " +
             "ON follows.user_followed = j.user_id " +
-            "WHERE i.username = :username;")
+            "WHERE j.username = :username;")
     List<String> getUserFollowedBy(String username);
 
     /**
@@ -100,7 +100,12 @@ public interface UserRepo extends CrudRepository<UserEntity, Long> {
      * @param username the username to check
      * @return the usernames that are followed by the aforementioned username
      */
-    @Query(value="SELECT j.username as username FROM follows LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as i ON follows.user_followed = i.user_id LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as j ON follows.user_following = j.user_id WHERE i.username = :username;")
+    @Query(value="SELECT i.username as username FROM follows " +
+            "LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as i " +
+            "ON follows.user_followed = i.user_id " +
+            "LEFT JOIN (SELECT id as user_id, username FROM users GROUP BY id) as j " +
+            "ON follows.user_following = j.user_id " +
+            "WHERE j.username = :username;")
     List<String> getUserFollowing(String username);
 
 }

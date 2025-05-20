@@ -115,20 +115,58 @@ export async function getAllUsers(): Promise<UserProfile[]> {
  * Follow a user
  */
 export async function followUser(userId: number): Promise<void> {
-  return apiRequest<void>('/api/accounts/follow', {
-    method: 'POST',
-    body: JSON.stringify({ userToFollow: userId })
-  })
+  try {
+    const token = localStorage.getItem('token')
+    const res = await fetch('/accounts/follow', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: JSON.stringify({ userToFollow: userId }),
+      credentials: 'include',
+    })
+    
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('Follow user failed:', errorText)
+      throw new Error(errorText || 'Failed to follow user')
+    }
+    
+    return
+  } catch (error) {
+    console.error('Follow user error:', error)
+    throw error
+  }
 }
 
 /**
  * Unfollow a user
  */
 export async function unfollowUser(userId: number): Promise<void> {
-  return apiRequest<void>('/api/accounts/unfollow', {
-    method: 'POST',
-    body: JSON.stringify({ userToFollow: userId })
-  })
+  try {
+    const token = localStorage.getItem('token')
+    const res = await fetch('/accounts/unfollow', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+      body: JSON.stringify({ userToFollow: userId }),
+      credentials: 'include',
+    })
+    
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('Unfollow user failed:', errorText)
+      throw new Error(errorText || 'Failed to unfollow user')
+    }
+    
+    return
+  } catch (error) {
+    console.error('Unfollow user error:', error)
+    throw error
+  }
 }
 
 /**
