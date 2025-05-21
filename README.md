@@ -71,7 +71,7 @@ Source/Backend/
 ## Goals
 - Remove exsisting html and replace frontend with Typescript or Vue.js
 - Update UI to a more modern, coding look
-- Implement the exsisting Spring Boot Java as the backend
+- ~~Implement the exsisting Spring Boot Java as the backend~~
 
 ## To-Do
 - Change login/register page to use a modal ontop of the home page
