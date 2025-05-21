@@ -4,58 +4,68 @@ This project is a continuation of the group application built in CST-339 (Java I
 
 ## Frontend Layout
 ```
-src/
-  assets/
-  components/
-    common/         # Reusable UI components (Button, Modal, etc.)
-    posts/          # Post-related components
-    user/           # User profile, settings, etc.
-    notifications/  # Notification components
-  pages/
-    Home.vue
-    Login.vue
-    Register.vue
-    Settings.vue
-    Admin.vue
-    Messages.vue
-    NotFound.vue
-  router/
-    index.ts
-  store/
-    index.ts        # Pinia or Vuex store setup
-  api/
-    index.ts        # API request functions
-  App.vue
-  main.ts
+Source/Frontend/
+  public/
+  src/
+    assets/
+    components/
+      icons/
+      settings/
+      NavBar.vue
+      HelloWorld.vue
+      UserCard.vue
+      Reply.vue
+      RepliesSection.vue
+      WelcomeItem.vue
+      TheWelcome.vue
+    pages/
+      Home.vue
+      Profile.vue
+      PostView.vue
+      Login.vue
+      Register.vue
+      Settings.vue
+      CreatePost.vue
+      NotFound.vue
+      Messages.vue
+      Admin.vue
+    router/
+      index.ts
+    store/
+      user.ts
+    api/
+      index.ts
+    App.vue
+    main.ts
+    shims-vue.d.ts
+  index.html
+  package.json
+  tsconfig.json
+  vite.config.ts
 ```
 
 ## Backend Layout
 ```
-Backend/
-└── blodged-backend/
-    ├── pom.xml
-    └── src/
-        ├── main/
-        │   ├── java/
-        │   │   └── com/
-        │   │       └── blodged/
-        │   │           ├── BlodgedBackendApplication.java
-        │   │           ├── config/           # Security, JWT, CORS, etc.
-        │   │           ├── controller/       # REST controllers (UserController, PostController, etc.)
-        │   │           ├── dto/              # Data Transfer Objects (UserDTO, AuthRequest, etc.)
-        │   │           ├── entity/           # JPA entities (User, Post, Reply, etc.)
-        │   │           ├── exception/        # Custom exceptions and handlers
-        │   │           ├── repository/       # Spring Data JPA repositories
-        │   │           ├── security/         # JWT filters, providers, etc.
-        │   │           └── service/          # Business logic (UserService, PostService, etc.)
-        │   └── resources/
-        │       ├── application.properties
-        │       └── static/                   # Static files (if any)
-        └── test/
-            └── java/
-                └── com/
-                    └── blodged/
-                        └── ...               # Unit and integration tests
+Source/Backend/
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com/
+    │   │       └── blodged/
+    │   │           ├── BackendApplication.java
+    │   │           ├── business/
+    │   │           ├── config/
+    │   │           ├── controller/
+    │   │           ├── data/
+    │   │           ├── model/
+    │   └── resources/
+    │       ├── application.properties
+    │       ├── static/
+    │       └── templates/
+    └── test/
+        └── java/
+            └── com/
+                └── blodged/
 ```
 
 ## Goals
