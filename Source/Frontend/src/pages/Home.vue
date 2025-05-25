@@ -202,7 +202,9 @@
               <span class="profile-initial">{{ (userStore.user && 'initials' in userStore.user) ? userStore.user.initials : (userStore.user?.username?.charAt(0).toUpperCase() || 'U') }}</span>
             </div>
             <div class="user-profile-info">
-              <span class="user-profile-name">@{{ userStore.user?.username || 'carterdanw' }}</span>
+              <router-link to="/profile" class="user-profile-name-link">
+                <span class="user-profile-name">@{{ userStore.user?.username || 'carterdanw' }}</span>
+              </router-link>
             </div>
           </div>
           <button class="logout-btn" @click="logout" title="Logout">
@@ -939,7 +941,8 @@ html, body {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 0;
-  margin-left: 0;
+  margin-left: 24px;
+  margin-right: 24px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
@@ -1340,5 +1343,30 @@ html, body {
   color: #ff5f56;
   fill: #ff5f56;
   transition: color 0.2s, fill 0.2s;
+}
+
+.user-profile-name-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s, border-bottom 0.2s;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 4px;
+  display: inline-block;
+  background: none !important;
+  outline: none !important;
+}
+
+.user-profile-name-link:focus,
+.user-profile-name-link:active {
+  background: none !important;
+  outline: none !important;
+}
+
+.user-profile-name-link:hover .user-profile-name {
+  color: #00d4ff !important;
+}
+
+.user-profile-name-link:hover {
+  border-bottom: 2px solid #00d4ff;
 }
 </style> 
