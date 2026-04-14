@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * Post model entity to interract with the database
  */
-@Table("POSTS")
+@Table("posts")
 public class PostEntity {
     
     @Id

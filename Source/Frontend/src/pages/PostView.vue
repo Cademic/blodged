@@ -329,7 +329,7 @@ async function deletePostConfirmed() {
 <style scoped>
 .post-view-container {
   padding: 2rem 0;
-  background: #f7f8fa;
+  background: var(--color-background);
   min-height: 100vh;
 }
 
@@ -340,9 +340,10 @@ async function deletePostConfirmed() {
 }
 
 .post-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: var(--color-background-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   padding: 1.25rem 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -354,8 +355,8 @@ async function deletePostConfirmed() {
 }
 
 .post-avatar {
-  background: #42b983;
-  color: #fff;
+  background: color-mix(in srgb, var(--color-heading) 70%, #42b983 30%);
+  color: var(--color-background);
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
@@ -377,7 +378,7 @@ async function deletePostConfirmed() {
 }
 
 .post-author a {
-  color: #42b983;
+  color: var(--color-heading);
   text-decoration: none;
 }
 
@@ -386,8 +387,9 @@ async function deletePostConfirmed() {
 }
 
 .post-date {
-  color: #666;
+  color: var(--color-text);
   font-size: 0.9rem;
+  opacity: 0.7;
 }
 
 .post-actions-author {
@@ -408,7 +410,7 @@ async function deletePostConfirmed() {
 }
 
 .action-btn:hover {
-  background-color: #f5f5f5;
+  background-color: var(--color-background-mute);
 }
 
 .action-img {
@@ -423,7 +425,7 @@ async function deletePostConfirmed() {
 .post-edit-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 0.375rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -453,8 +455,8 @@ async function deletePostConfirmed() {
 }
 
 .post-edit-btn.save-btn {
-  background: #4a5568;
-  color: white;
+  background: var(--color-heading);
+  color: var(--color-background);
 }
 
 .post-edit-btn.save-btn:hover:not(:disabled) {
@@ -462,8 +464,8 @@ async function deletePostConfirmed() {
 }
 
 .post-edit-btn.cancel-btn {
-  background: #e2e8f0;
-  color: #4a5568;
+  background: var(--color-background-mute);
+  color: var(--color-text);
 }
 
 .post-edit-btn.cancel-btn:hover:not(:disabled) {
@@ -471,7 +473,7 @@ async function deletePostConfirmed() {
 }
 
 .post-content {
-  color: #333;
+  color: var(--color-text);
   font-size: 1.1rem;
   line-height: 1.5;
   margin: 1rem 0;
@@ -481,7 +483,7 @@ async function deletePostConfirmed() {
 .post-stats {
   display: flex;
   justify-content: space-between;
-  color: #666;
+  color: var(--color-text);
   font-size: 0.9rem;
   margin: 1rem 0 0.5rem;
 }
@@ -525,7 +527,7 @@ async function deletePostConfirmed() {
   gap: 1rem;
   margin-top: 0.5rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--color-border);
 }
 
 .post-action {
@@ -533,22 +535,22 @@ async function deletePostConfirmed() {
   transition: all 0.2s;
   padding: 0.35rem 0.7rem;
   border-radius: 4px;
-  background: #f5f5f5;
+  background: var(--color-background-mute);
 }
 
 .post-action:hover {
-  background: #e0e0e0;
+  filter: brightness(0.96);
 }
 
 .post-action-login {
   text-align: center;
   margin-top: 0.5rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--color-border);
 }
 
 .post-action-login a {
-  color: #6366F1;
+  color: var(--color-heading);
   text-decoration: none;
 }
 
@@ -559,9 +561,10 @@ async function deletePostConfirmed() {
 .loading-state,
 .error-state,
 .no-post {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: var(--color-background-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   padding: 2rem;
   text-align: center;
 }
@@ -569,7 +572,7 @@ async function deletePostConfirmed() {
 .return-home {
   display: inline-block;
   margin-top: 1rem;
-  color: #6366F1;
+  color: var(--color-heading);
   text-decoration: none;
 }
 
@@ -592,7 +595,8 @@ async function deletePostConfirmed() {
 }
 
 .delete-confirm-dialog {
-  background: white;
+  background: var(--color-background-soft);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1.5rem;
   max-width: 400px;
@@ -603,13 +607,13 @@ async function deletePostConfirmed() {
 .delete-confirm-dialog h3 {
   margin-top: 0;
   font-size: 1.25rem;
-  color: #2d3748;
+  color: var(--color-heading);
   margin-bottom: 0.75rem;
 }
 
 .delete-confirm-dialog p {
   margin-bottom: 1.5rem;
-  color: #4a5568;
+  color: var(--color-text);
 }
 
 .delete-confirm-actions {
@@ -642,8 +646,8 @@ async function deletePostConfirmed() {
 }
 
 .confirm-btn.cancel-btn {
-  background: #edf2f7;
-  color: #4a5568;
+  background: var(--color-background-mute);
+  color: var(--color-text);
 }
 
 .confirm-btn.cancel-btn:hover:not(:disabled) {

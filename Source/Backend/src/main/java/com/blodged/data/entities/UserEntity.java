@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * User model entity to interract with the databse
  */
-@Table("USERS")
+@Table("users")
 public class UserEntity {
 
     @Id

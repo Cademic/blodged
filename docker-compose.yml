@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: blodged-postgres
+    environment:
+      POSTGRES_DB: blodged
+      POSTGRES_USER: blodged
+      POSTGRES_PASSWORD: blodged
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Source/Backend/docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blodged -d blodged"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./Source/Backend
+      dockerfile: Dockerfile
+    container_name: blodged-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/blodged
+      SPRING_DATASOURCE_USERNAME: blodged
+      SPRING_DATASOURCE_PASSWORD: blodged
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

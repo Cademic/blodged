@@ -92,7 +92,7 @@
               <span class="post-username-wrapper">
                 <span class="post-bracket">&lt;</span><span class="post-username">@{{ post.author.username }}</span><span class="post-bracket"> /&gt;</span>
               </span>
-              <span class="post-timestamp">• 2h</span>
+              <span class="post-timestamp">• {{ formatTimeAgo(post.createdAt) }}</span>
             </div>
             <div class="post-actions" v-if="userStore.isLoggedIn && post.author.username === userStore.user?.username">
               <button class="action-btn edit-btn" @click="editPost(post.id)" title="Edit post">
@@ -552,16 +552,16 @@ onMounted(() => {
 html, body {
   margin: 0;
   padding: 0;
-  background: #282A36 !important;
+  background: var(--color-background);
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
 }
 
 #app {
-  background: #282A36 !important;
+  background: var(--color-background);
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -611,6 +611,14 @@ html, body {
 </style>
 
 <style scoped>
+:global(:root) {
+  --home-accent: #00d4ff;
+  --home-secondary-accent: #bd93f9;
+  --home-surface: color-mix(in srgb, var(--color-background-soft) 90%, #111827 10%);
+  --home-surface-2: color-mix(in srgb, var(--color-background-mute) 90%, #1f2937 10%);
+  --home-border: color-mix(in srgb, var(--color-border) 70%, transparent);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -619,17 +627,15 @@ html, body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: minmax(0, 1fr) 340px;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #282A36;
-  color: #e8eaed;
+  background: var(--color-background);
+  color: var(--color-text);
   line-height: 1.6;
   overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   margin: 0;
   padding: 0;
 }
@@ -637,9 +643,9 @@ html, body {
 /* Header */
 .header {
   grid-column: 1 / -1;
-  background: #1E1F29;
-  border-bottom: 1px solid #2d3748;
-  padding: 20px 24px;
+  background: color-mix(in srgb, var(--home-surface) 92%, transparent);
+  border-bottom: 1px solid var(--home-border);
+  padding: 0.9rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -655,27 +661,27 @@ html, body {
 }
 
 .logo {
-  font-size: 46px;
+  font-size: 1.45rem;
   font-weight: 800;
-  color: #00d4ff;
+  color: var(--home-accent);
   text-decoration: none;
   display: flex;
   align-items: center;
 }
 
 .logo-brackets {
-  color: #00d4ff;
-  font-size: 50px;
+  color: var(--home-accent);
+  font-size: 1.6rem;
   font-weight: 600;
   line-height: 1;
 }
 
 .logo-text {
-  color: #ffffff;
-  font-size: 46px;
+  color: var(--color-heading);
+  font-size: 1.45rem;
   font-weight: 800;
   margin: 0 4px;
-  border-bottom: 2px solid #00d4ff;
+  border-bottom: 2px solid var(--home-accent);
   padding-bottom: 0;
   line-height: 1;
   display: flex;
@@ -684,17 +690,17 @@ html, body {
 
 .header-nav {
   display: flex;
-  gap: 32px;
+  gap: 0.4rem;
   align-items: center;
 }
 
 .nav-item {
-  color: #a0aec0;
+  color: var(--color-text);
   text-decoration: none;
   font-weight: 600;
-  font-size: 40px;
-  padding: 12px 20px;
-  border-radius: 0;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
   transition: all 0.3s;
   position: relative;
   display: flex;
@@ -705,20 +711,20 @@ html, body {
 }
 
 .nav-item:hover {
-  color: #00d4ff;
-  background: none;
-  border-bottom: 2px solid #00d4ff;
+  color: var(--home-accent);
+  background: color-mix(in srgb, var(--home-surface-2) 65%, transparent);
+  border-bottom: 2px solid var(--home-accent);
 }
 
 .nav-item.active {
-  color: #00d4ff;
-  background: none;
-  border-bottom: 2px solid #00d4ff;
+  color: var(--home-accent);
+  background: color-mix(in srgb, var(--home-surface-2) 65%, transparent);
+  border-bottom: 2px solid var(--home-accent);
 }
 
 .nav-icon {
-  width: 46px;
-  height: 46px;
+  width: 1rem;
+  height: 1rem;
   transition: all 0.2s;
 }
 
@@ -729,9 +735,9 @@ html, body {
 }
 
 .settings-btn {
-  background: #282A36;
+  background: var(--home-surface-2);
   border: none;
-  color: #ffffff;
+  color: var(--color-heading);
   cursor: pointer;
   padding: 12px;
   border-radius: 8px;
@@ -749,29 +755,31 @@ html, body {
 }
 
 .settings-icon {
-  width: 46px;
-  height: 46px;
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 /* Main Content */
 .main-content {
-  padding: 24px;
+  padding: 1.2rem;
   overflow-y: auto;
-  height: calc(100vh - 76px);
-  background: #282A36;
-  margin-right: 16px;
+  height: calc(100vh - 70px);
+  background: var(--color-background);
+  margin-right: 0;
 }
 
 .compose-section {
-  background: #1E1F29;
-  padding: 20px;
-  margin-bottom: 24px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .compose-section:focus-within {
-  border-color: #00d4ff;
+  border-color: var(--home-accent);
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
 }
 
@@ -803,7 +811,7 @@ html, body {
 }
 
 .post-btn {
-  background: #BD93F9;
+  background: var(--home-secondary-accent);
   color: white;
   border: none;
   border-radius: 4px;
@@ -847,14 +855,14 @@ html, body {
 .feed {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 1rem;
 }
 
 .post {
-  background: #1E1F29;
-  border: none;
-  border-radius: 6px;
-  padding: 24px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 16px;
+  padding: 1.1rem;
   transition: all 0.2s;
   cursor: pointer;
   word-wrap: break-word;
@@ -937,8 +945,8 @@ html, body {
 }
 
 .post-content {
-  color: #cbd5e0;
-  font-size: 16px;
+  color: var(--color-text);
+  font-size: 0.98rem;
   line-height: 1.6;
   margin-bottom: 0;
   margin-left: 24px;
@@ -955,7 +963,7 @@ html, body {
   justify-content: space-between;
   padding-top: 12px;
   margin-left: 52px;
-  border-top: 1px solid #2d3748;
+  border-top: 1px solid var(--home-border);
 }
 
 .post-stats {
@@ -978,12 +986,12 @@ html, body {
 }
 
 .like-btn:hover {
-  color: #00d4ff;
+  color: var(--home-accent);
   background: rgba(0, 212, 255, 0.1);
 }
 
 .like-btn.liked {
-  color: #00d4ff;
+  color: var(--home-accent);
 }
 
 .like-icon {
@@ -1010,7 +1018,7 @@ html, body {
 .replies-link {
   background: none;
   border: none;
-  color: #00d4ff;
+  color: var(--home-accent);
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 6px;
@@ -1091,9 +1099,9 @@ html, body {
 
 /* Right Sidebar */
 .right-sidebar {
-  background: #1E1F29;
-  border-left: 1px solid #2d3748;
-  padding: 24px 24px 0 24px;
+  background: var(--home-surface);
+  border-left: 1px solid var(--home-border);
+  padding: 1rem;
   overflow-y: auto;
   height: calc(100vh - 76px);
   position: relative;
@@ -1113,7 +1121,7 @@ html, body {
   margin-bottom: 32px;
 }
 
-.search-input {  width: 100%;  background: #2d3748;  border: 1px solid #4a5568;  border-radius: 6px;  padding: 12px 16px;  color: #e8eaed;  font-size: 14px;  transition: all 0.2s;}
+.search-input {  width: 100%;  background: var(--home-surface-2);  border: 1px solid var(--home-border);  border-radius: 12px;  padding: 10px 14px;  color: var(--color-text);  font-size: 14px;  transition: all 0.2s;}
 
 .search-input:focus {
   outline: none;
@@ -1143,10 +1151,10 @@ html, body {
 }
 
 .challenges-section {
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 6px;
-  padding: 20px;
+  background: color-mix(in srgb, var(--home-surface-2) 85%, transparent);
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+  padding: 1rem;
   margin-bottom: 24px;
 }
 
@@ -1156,7 +1164,7 @@ html, body {
   gap: 12px;
   padding: 12px;
   background: rgba(0, 212, 255, 0.05);
-  border-radius: 4px;
+  border-radius: 10px;
   margin-bottom: 8px;
   transition: all 0.2s;
   cursor: pointer;
@@ -1260,15 +1268,15 @@ html, body {
   bottom: 0;
   right: 0;
   left: unset;
-  width: 400px;
+  width: 340px;
   z-index: 10;
-  margin-left: calc(100vw - 400px);
+  margin-left: calc(100vw - 340px);
   padding: 12px 20px;
-  background: #282A36;
+  background: var(--color-background);
   border-radius: 0;
   transition: all 0.2s;
   box-shadow: 0 -2px 16px rgba(0,0,0,0.25);
-  border-top: 1px solid #2d3748;
+  border-top: 1px solid var(--home-border);
   display: flex;
   align-items: center;
 }
@@ -1289,9 +1297,9 @@ html, body {
 }
 
 .user-profile-avatar {
-  width: 66px;
-  height: 66px;
-  border-radius: 6px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1300,7 +1308,7 @@ html, body {
 
 .profile-initial {
   color: #fff;
-  font-size: 32px;
+  font-size: 1rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -1315,9 +1323,9 @@ html, body {
 }
 
 .user-profile-name {
-  font-size: 32px;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-heading);
 }
 
 .logout-btn {
@@ -1331,15 +1339,15 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 66px;
-  height: 66px;
-  min-width: 66px;
-  min-height: 66px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
 }
 
 .logout-icon {
-  width: 66px;
-  height: 66px;
+  width: 28px;
+  height: 28px;
   color: #ff5f56;
   fill: #ff5f56;
   transition: color 0.2s, fill 0.2s;
@@ -1363,10 +1371,10 @@ html, body {
 }
 
 .user-profile-name-link:hover .user-profile-name {
-  color: #00d4ff !important;
+  color: var(--home-accent) !important;
 }
 
 .user-profile-name-link:hover {
-  border-bottom: 2px solid #00d4ff;
+  border-bottom: 2px solid var(--home-accent);
 }
 </style> 

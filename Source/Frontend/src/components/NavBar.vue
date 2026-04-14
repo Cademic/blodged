@@ -36,48 +36,73 @@ function logout() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 2rem;
-  background: #fff;
-  border-bottom: 1px solid #eaeaea;
+  gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  background: color-mix(in srgb, var(--color-background-soft) 90%, transparent);
+  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 .navbar-left, .navbar-right {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 .navbar-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #42b983;
-  margin-right: 2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-right: 0.75rem;
   text-decoration: none;
+  letter-spacing: 0.01em;
 }
 .navbar-link {
-  margin: 0 0.75rem;
-  color: #35495e;
+  margin: 0;
+  color: var(--color-text);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  transition: color 0.2s, background-color 0.2s;
 }
 .navbar-link.router-link-exact-active {
-  color: #42b983;
-  font-weight: bold;
+  color: var(--color-heading);
+  background: color-mix(in srgb, var(--color-background-mute) 75%, transparent);
+  font-weight: 600;
+}
+.navbar-link:hover {
+  background: color-mix(in srgb, var(--color-background-mute) 70%, transparent);
 }
 .navbar-btn {
-  background: #42b983;
-  color: #fff;
-  border: none;
-  padding: 0.4rem 1.2rem;
-  border-radius: 4px;
-  margin-left: 1rem;
+  background: var(--color-heading);
+  color: var(--color-background);
+  border: 1px solid transparent;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  margin-left: 0.35rem;
   cursor: pointer;
   font-weight: 500;
-  transition: background 0.2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
 .navbar-btn:hover {
-  background: #35495e;
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-logo {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.3rem;
+  }
 }
 </style> 
